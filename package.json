@@ -50,7 +50,8 @@
         "wdio-chromedriver-service": "^8.1.1"
     },
     "dependencies": {
-        "chart.js": "^4.4.1",
+        "chart.js": "^4.4.2",
+        "clozecraft": "^0.4.0",
         "pagerank.js": "^1.0.2"
     },
     "packageManager": "npm@8.18.0"

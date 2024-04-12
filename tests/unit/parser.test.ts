@@ -1,15 +1,45 @@
 import { parse } from "src/parser";
 import { CardType } from "src/Question";
 
-const defaultArgs: [string, string, string, string, boolean, boolean, boolean] = [
+const defaultArgs: [string, string, string, string, string[]] = [
     "::",
     ":::",
     "?",
     "??",
-    true,
-    true,
-    true,
+    [
+        "==[123;;]answer[;;hint]==",
+        "**[123;;]answer[;;hint]**",
+        "{{[123;;]answer[;;hint]}}"
+    ]
 ];
+
+/**
+ * This function is a small wrapper around parseEx used for testing only.
+ * Created when the actual parser changed from returning [CardType, string, number, number] to ParsedQuestionInfo.
+ * It's purpose is to minimise changes to all the test cases here during the parser()->parserEx() change.
+ */
+function parse(
+    text: string,
+    singlelineCardSeparator: string,
+    singlelineReversedCardSeparator: string,
+    multilineCardSeparator: string,
+    multilineReversedCardSeparator: string,
+    clozePatterns: string[],
+): [CardType, string, number, number][] {
+    const list: ParsedQuestionInfo[] = parseEx(
+        text,
+        singlelineCardSeparator,
+        singlelineReversedCardSeparator,
+        multilineCardSeparator,
+        multilineReversedCardSeparator,
+        clozePatterns,
+    );
+    const result: [CardType, string, number, number][] = [];
+    for (const item of list) {
+        result.push([item.cardType, item.text, item.firstLineNum, item.lastLineNum]);
+    }
+    return result;
+}
 
 test("Test parsing of single line basic cards", () => {
     expect(parse("Question::Answer", ...defaultArgs)).toEqual([
@@ -120,7 +150,7 @@ test("Test parsing of cloze cards", () => {
     expect(parse("lorem ipsum ==p\ndolor won==", ...defaultArgs)).toEqual([]);
     expect(parse("lorem ipsum ==dolor won=", ...defaultArgs)).toEqual([]);
     // ==highlights== turned off
-    expect(parse("cloze ==deletion== test", "::", ":::", "?", "??", false, true, false)).toEqual(
+    expect(parse("cloze ==deletion== test", "::", ":::", "?", "??", ["**[123;;]answer[;;hint]**"])).toEqual(
         [],
     );
 
@@ -151,7 +181,7 @@ test("Test parsing of cloze cards", () => {
     expect(parse("lorem ipsum **p\ndolor won**", ...defaultArgs)).toEqual([]);
     expect(parse("lorem ipsum **dolor won*", ...defaultArgs)).toEqual([]);
     // **bolded** turned off
-    expect(parse("cloze **deletion** test", "::", ":::", "?", "??", true, false, false)).toEqual(
+    expect(parse("cloze **deletion** test", "::", ":::", "?", "??", ["==[123;;]answer[;;hint]=="])).toEqual(
         [],
     );
 
