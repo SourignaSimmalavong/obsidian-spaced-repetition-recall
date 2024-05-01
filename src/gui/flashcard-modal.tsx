@@ -110,8 +110,9 @@ export class FlashcardModal extends Modal {
                     e.preventDefault();
                     e.stopPropagation();
                 };
-                if (this.mode !== FlashcardModalMode.Closed && e.code === "KeyS") {
+                if (this.mode !== FlashcardModalMode.Closed && e.code === "KeyQ") {
                     this.skipCurrentCard();
+                    console.log("Skip");
                     consume();
                 } else if (
                     this.mode === FlashcardModalMode.Front &&
@@ -120,17 +121,29 @@ export class FlashcardModal extends Modal {
                     this.showAnswer();
                     consume();
                 } else if (this.mode === FlashcardModalMode.Back) {
-                    if (e.code === "Numpad1" || e.code === "Digit1") {
+                    if (e.code === "Numpad1" || e.code === "Digit1"
+                        || e.code === "Numpad4" || e.code === "Digit4"
+                        || e.code === "KeyS") {
                         this.processReview(ReviewResponse.Hard);
+                        console.log("Hard");
                         consume();
-                    } else if (e.code === "Numpad2" || e.code === "Digit2" || e.code === "Space") {
+                    } else if (e.code === "Numpad2" || e.code === "Digit2"
+                        || e.code === "Numpad5" || e.code === "Digit5"
+                        || e.code === "KeyD"
+                        || e.code === "Space") {
                         this.processReview(ReviewResponse.Good);
+                        console.log("Good");
                         consume();
-                    } else if (e.code === "Numpad3" || e.code === "Digit3") {
+                    } else if (e.code === "Numpad3" || e.code === "Digit3"
+                        || e.code === "Numpad6" || e.code === "Digit6"
+                        || e.code === "KeyF") {
                         this.processReview(ReviewResponse.Easy);
+                        console.log("Easy");
                         consume();
-                    } else if (e.code === "Numpad0" || e.code === "Digit0") {
+                    } else if (e.code === "Numpad0" || e.code === "Digit0"
+                        || e.code === "KeyA") {
                         this.processReview(ReviewResponse.Reset);
+                        console.log("Reset");
                         consume();
                     }
                 }
