@@ -18,12 +18,11 @@ export function parse(
     multilineCardSeparator: string,
     multilineReversedCardSeparator: string,
     clozePatterns: string[],
-): ParsedQuestionInfo[] {
+): [CardType, string, number][] {
     let cardText = "";
     const cards: [CardType, string, number][] = [];
     let cardType: CardType | null = null;
-    let firstLineNo = 0;
-    let lastLineNo = 0;
+    let lineNo = 0;
     const clozecrafter = new ClozeCrafter(clozePatterns);
 
     const lines: string[] = text.replaceAll("\r\n", "\n").split("\n");

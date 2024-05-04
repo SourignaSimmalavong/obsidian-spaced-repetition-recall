@@ -171,9 +171,7 @@ export class TrackedFile implements ITrackedFile {
             settings.singleLineReversedCardSeparator,
             settings.multilineCardSeparator,
             settings.multilineReversedCardSeparator,
-            settings.convertHighlightsToClozes,
-            settings.convertBoldTextToClozes,
-            settings.convertCurlyBracketsToClozes,
+            settings.clozePatterns
         );
 
         for (const parsedCard of parsedCards) {

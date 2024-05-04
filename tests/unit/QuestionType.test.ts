@@ -85,16 +85,16 @@ test("CardType.Cloze", () => {
         ),
     ).toEqual([
         new CardFrontBack(
-            "This is a really very " + clozeFormatter.asking() + " and fascinating and great test",
-            "This is a really very " + clozeFormatter.showingAnswer("interesting") + " and fascinating and great test",
-        ),
-        new CardFrontBack(
             "This is a really very interesting and " + clozeFormatter.asking() + " and great test",
             "This is a really very interesting and " + clozeFormatter.showingAnswer("fascinating") + " and great test",
         ),
         new CardFrontBack(
             "This is a really very interesting and fascinating and " + clozeFormatter.asking() + " test",
             "This is a really very interesting and fascinating and " + clozeFormatter.showingAnswer("great") + " test",
+        ),
+        new CardFrontBack(
+            "This is a really very " + clozeFormatter.asking() + " and fascinating and great test",
+            "This is a really very " + clozeFormatter.showingAnswer("interesting") + " and fascinating and great test",
         ),
     ]);
 });

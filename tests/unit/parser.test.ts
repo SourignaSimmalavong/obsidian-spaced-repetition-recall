@@ -13,33 +13,6 @@ const defaultArgs: [string, string, string, string, string[]] = [
     ]
 ];
 
-/**
- * This function is a small wrapper around parseEx used for testing only.
- * Created when the actual parser changed from returning [CardType, string, number, number] to ParsedQuestionInfo.
- * It's purpose is to minimise changes to all the test cases here during the parser()->parserEx() change.
- */
-function parse(
-    text: string,
-    singlelineCardSeparator: string,
-    singlelineReversedCardSeparator: string,
-    multilineCardSeparator: string,
-    multilineReversedCardSeparator: string,
-    clozePatterns: string[],
-): [CardType, string, number, number][] {
-    const list: ParsedQuestionInfo[] = parseEx(
-        text,
-        singlelineCardSeparator,
-        singlelineReversedCardSeparator,
-        multilineCardSeparator,
-        multilineReversedCardSeparator,
-        clozePatterns,
-    );
-    const result: [CardType, string, number, number][] = [];
-    for (const item of list) {
-        result.push([item.cardType, item.text, item.firstLineNum, item.lastLineNum]);
-    }
-    return result;
-}
 
 test("Test parsing of single line basic cards", () => {
     expect(parse("Question::Answer", ...defaultArgs)).toEqual([
