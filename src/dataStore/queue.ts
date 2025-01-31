@@ -259,12 +259,14 @@ export class Queue implements IQueue {
         if (untrackedFiles > 0) {
             console.log(
                 "Recall: Untracked " +
-                    bUnTfiles.size +
-                    " files with a total of " +
-                    removedItems +
-                    " items while building queue!\n",
+                bUnTfiles.size +
+                " files with a total of " +
+                removedItems +
+                " items while building queue!\n",
                 bUnTfiles,
             );
+            await store.pruneData();
+            await store.save(); // Update the tracking file.
         }
     }
 

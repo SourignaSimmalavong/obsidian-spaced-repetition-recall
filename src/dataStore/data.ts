@@ -158,6 +158,7 @@ export class DataStore {
         try {
             await app.vault.adapter.write(path, JSON.stringify(this.data));
             this.data.mtime = await this.getmtime();
+            console.log("Saved data file: " + path);
         } catch (error) {
             MiscUtils.notice("Unable to save data file!");
             console.log(error);
@@ -263,10 +264,11 @@ export class DataStore {
         return id < 0
             ? null
             : this.data.items.find((item: RepetitionItem, _idx) => {
-                  if (item != null && item.ID === id) {
-                      return true;
-                  }
-              });
+                if (item != null && item.ID === id) {
+                    return true;
+                }
+                return false;
+            });
     }
 
     getFileByIndex(idx: number): TrackedFile {
@@ -517,6 +519,10 @@ export class DataStore {
                 this.unTrackItem(id);
                 numItems++;
             }
+            // for (const cardID of trackedFile.cardIDs) {
+            //     this.unTrackItem(cardID);
+            //     numItems++;
+            // }
         }
         if (cardName == null && this.settings.trackedNoteToDecks) {
             trackedFile.cardIDs.filter((id) => id >= 0).forEach(this.unTrackItem, this);
@@ -845,10 +851,10 @@ export class DataStore {
 
         console.log(
             "removed " +
-                removedtkfiles +
-                " nullTrackedfile(s), removed " +
-                removedItems +
-                " nullitem(s).",
+            removedtkfiles +
+            " nullTrackedfile(s), removed " +
+            removedItems +
+            " nullitem(s).",
         );
         return;
     }
