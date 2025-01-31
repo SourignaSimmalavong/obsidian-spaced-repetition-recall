@@ -9,7 +9,8 @@ const defaultArgs: [string, string, string, string, string[]] = [
     [
         "==[123;;]answer[;;hint]==",
         "**[123;;]answer[;;hint]**",
-        "{{[123;;]answer[;;hint]}}"
+        "{{[123;;]answer[;;hint]}}",
+        "==answer==[^\\[hint\\]][\\[^123\\]]",
     ]
 ];
 
@@ -118,6 +119,45 @@ test("Test parsing of cloze cards", () => {
     ).toEqual([
         [CardType.Cloze, "a deletion on\nsuch ==wow==", 3],
         [CardType.Cloze, "many text\nsuch surprise ==wow== more ==text==\nsome text after", 6],
+    ]);
+    // cloze with hint
+    expect(
+        parse(
+            "some text before\n\na deletion on\nsuch ==wow==^[wow hint]\n\n" +
+            "many text\nsuch surprise ==wow== more ==text==^[text hint]\nsome text after\n\nHmm",
+            ...defaultArgs,
+        ),
+    ).toEqual([
+        [CardType.Cloze, "a deletion on\nsuch ==wow==^[wow hint]", 3],
+        [CardType.Cloze, "many text\nsuch surprise ==wow== more ==text==^[text hint]\nsome text after", 6],
+    ]);
+    // cloze with hint and number
+    expect(
+        parse(
+            "some text before\n\na deletion on\nsuch ==wow==[^1]\n\n" +
+            "many text\nsuch surprise ==wow==[^2] more ==text==^[text hint][^1]\nsome text after\n\nHmm",
+            ...defaultArgs,
+        ),
+    ).toEqual([
+        [CardType.Cloze, "a deletion on\nsuch ==wow==[^1]", 3],
+        [CardType.Cloze, "many text\nsuch surprise ==wow==[^2] more ==text==^[text hint][^1]\nsome text after", 6],
+    ]);
+    // multiline flashcard with multiple clozes
+    expect(
+        parse(
+            "something at the beginning\n" +
+            "\n" +
+            "line 1\n" +
+            "line 2\n" +
+            "* ==answer A==\n" +
+            "* ==answer B==",
+            ...defaultArgs,
+        ),
+    ).toEqual([
+        [CardType.Cloze, "line 1\n" +
+            "line 2\n" +
+            "* ==answer A==\n" +
+            "* ==answer B==", 4]
     ]);
     expect(parse("srdf ==", ...defaultArgs)).toEqual([]);
     expect(parse("lorem ipsum ==p\ndolor won==", ...defaultArgs)).toEqual([]);
